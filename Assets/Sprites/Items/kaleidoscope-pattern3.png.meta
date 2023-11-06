@@ -212,7 +212,11 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      kaleidoscope-pattern3_0: -4038212325891857382
+      kaleidoscope-pattern3_1: 3808688765900609347
+      kaleidoscope-pattern3_2: 7353028665137479603
+      kaleidoscope-pattern3_3: -2059515201121046793
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
