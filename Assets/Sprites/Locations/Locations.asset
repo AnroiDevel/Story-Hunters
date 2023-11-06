@@ -1,0 +1,53 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b06e9f1c46d200b438efde9a9f5b4afd, type: 3}
+  m_Name: Locations
+  m_EditorClassIdentifier: 
+  SpriteObjs:
+  - Name: "\u0420\u043E\u0434\u043D\u043E\u0439 \u0434\u043E\u043C"
+    Sprite: {fileID: 21300000, guid: 16a4df349f35eb24ca872378411cb678, type: 3}
+  - Name: "\u0414\u043E\u0440\u043E\u0436\u043D\u0430\u044F \u0441\u0443\u043C\u043A\u0430"
+    Sprite: {fileID: 6386931567727778941, guid: 6bf89e38da87c634e963c7b869d8cbfb, type: 3}
+  - Name: "\u041F\u043E\u0435\u0437\u0434"
+    Sprite: {fileID: -4368322862165430076, guid: efe15203512791541901625630aab02c, type: 3}
+  - Name: "\u041F\u043E\u043B\u043E\u043C\u043A\u0430 \u043F\u043E\u0435\u0437\u0434\u0430"
+    Sprite: {fileID: 3755169886223635564, guid: ecd647406ff90714a9b4b8de0fbee234, type: 3}
+  - Name: "\u041A\u043E\u043B\u0435\u0441\u0430 \u043F\u043E\u0435\u0437\u0434\u0430"
+    Sprite: {fileID: 1979262714796487897, guid: ff544fa5f58ac3345a36a7cd78510d70, type: 3}
+  - Name: "\u0414\u044B\u043C\u043E\u0432\u0430\u044F \u0442\u0440\u0443\u0431\u0430"
+    Sprite: {fileID: 5193310118108220758, guid: ed8631a6c4f00e349a896c08cc65c929, type: 3}
+  - Name: "\u0422\u043E\u043F\u043A\u0430"
+    Sprite: {fileID: 21300000, guid: c099132e68cb1ad4f9bfb754b3d518b9, type: 3}
+  - Name: "\u0422\u043E\u043F\u043A\u04302"
+    Sprite: {fileID: 21300000, guid: 3e3601736051e8c42aa2ea12bf0c1760, type: 3}
+  - Name: "\u041F\u0443\u043B\u044C\u0442 \u0443\u043F\u0440\u0430\u0432\u043B\u0435\u043D\u0438\u044F"
+    Sprite: {fileID: 5351100192499409250, guid: 7154db488e71a0940826e0a8a422939e, type: 3}
+  - Name: "\u0417\u0430\u0431\u0440\u043E\u0448\u0435\u043D\u044B\u0439 \u0445\u0440\u0430\u043C"
+    Sprite: {fileID: 21300000, guid: 30c7f1c87a5108b40a8371055296740e, type: 3}
+  - Name: "\u0412\u043E\u0440\u043E\u0442\u0430 \u0445\u0440\u0430\u043C\u0430000"
+    Sprite: {fileID: 21300000, guid: beeece95d9f2e9b41aaf9fd76488a4a1, type: 3}
+  - Name: "\u0412\u043E\u0440\u043E\u0442\u0430 \u0445\u0440\u0430\u043C\u0430001"
+    Sprite: {fileID: 21300000, guid: 123e6cd0578dceb42a78539886d9e08c, type: 3}
+  - Name: "\u0412\u043E\u0440\u043E\u0442\u0430 \u0445\u0440\u0430\u043C\u0430010"
+    Sprite: {fileID: 21300000, guid: a3825ac5f361e9d47b20e86324bfd175, type: 3}
+  - Name: "\u0412\u043E\u0440\u043E\u0442\u0430 \u0445\u0440\u0430\u043C\u0430011"
+    Sprite: {fileID: 21300000, guid: da5a4a5e33b18494db90a0135b76ae48, type: 3}
+  - Name: "\u0412\u043E\u0440\u043E\u0442\u0430 \u0445\u0440\u0430\u043C\u0430100"
+    Sprite: {fileID: 21300000, guid: b6bebc447b29ecb499bdd27768ac6fe1, type: 3}
+  - Name: "\u0412\u043E\u0440\u043E\u0442\u0430 \u0445\u0440\u0430\u043C\u0430101"
+    Sprite: {fileID: 21300000, guid: 9f8f2a2a5138af84baddf94b0c331ccb, type: 3}
+  - Name: "\u0412\u043E\u0440\u043E\u0442\u0430 \u0445\u0440\u0430\u043C\u0430110"
+    Sprite: {fileID: 21300000, guid: f434486ab435166409f0c239d0cb2443, type: 3}
+  - Name: "\u0412\u043E\u0440\u043E\u0442\u0430 \u0445\u0440\u0430\u043C\u0430111"
+    Sprite: {fileID: 21300000, guid: c3d1f2c65f1225d409816e700c1f2331, type: 3}
+  - Name: "\u041A\u043E\u043D\u0435\u0446"
+    Sprite: {fileID: 8579629350446032528, guid: 2facaa276bc432e46956f354f58ad11c, type: 3}
