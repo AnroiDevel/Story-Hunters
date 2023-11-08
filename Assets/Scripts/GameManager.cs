@@ -75,6 +75,10 @@ public class GameManager : MonoBehaviour
 
     private void ShowObjects(Location currentLocation)
     {
+        foreach (var obj in _objects)
+        {
+            obj.gameObject.SetActive(false);
+        }
         if (currentLocation.Objects != null)
         {
             for (int i = 0; i < currentLocation.Objects.Count; i++)
@@ -93,6 +97,10 @@ public class GameManager : MonoBehaviour
     private void ClearAllLocationFields()
     {
         _variantsPanel.SetActive(false);
+        foreach(var obj in _objects)
+        {
+            obj.gameObject.SetActive(false);    
+        }
         foreach (var answ in _variantsButtons)
         {
             answ.gameObject.SetActive(false);
@@ -215,13 +223,14 @@ public class GameManager : MonoBehaviour
 
     internal void InitObject(DialogObject obj)
     {
-        Processing(obj.Dialogs);
+        Processing(obj);
     }
 
-    private async void Processing(string[] dialog, int startIndex = 0)
+    private async void Processing(DialogObject obj, int startIndex = 0)
     {
         DisableVariantsButtons();
         _blockedClickPanel.SetActive(true);
+        var dialog = obj.Dialogs;
         var entryString = dialog.Where(s => s.StartsWith(startIndex.ToString())).ToArray();
         var enterIndex = 0;
         if (!entryString[0].Contains("+"))
@@ -247,16 +256,36 @@ public class GameManager : MonoBehaviour
                 {
                     _variantsButtons[i].onClick.AddListener(() =>
                     {
-                        Processing(dialog, result);
+                        Processing(obj, result);
                     });
 
                 }
                 else
                 {
-                    _variantsButtons[i].onClick.AddListener(() =>
+                    if (next.Contains("GO"))
                     {
-                        CloseDialog();
-                    });
+                        var nextScena = next.Split("GO")[1];
+                        _variantsButtons[i].onClick.AddListener(() =>
+                        {
+                            ApplyLocate(_locationsDict[int.Parse(nextScena)]);
+
+                        });
+                    }
+                    else if(next.Contains("ADD"))
+                    {
+                        _variantsButtons[i].onClick.AddListener(() =>
+                        {
+                            TakeItem(obj);
+
+                        });
+                    }
+                    else
+                    {
+                        _variantsButtons[i].onClick.AddListener(() =>
+                        {
+                            CloseDialog();
+                        });
+                    }
                 }
 
             }
@@ -282,8 +311,7 @@ public class GameManager : MonoBehaviour
                 startIndex += 1;
             }
 
-
-            Processing(dialog, startIndex);
+            Processing(obj, startIndex);
         }
     }
 }

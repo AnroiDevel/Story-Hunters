@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
+
 public class ClickableObject : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     [SerializeField] private ObjectType _clickObjectType;
