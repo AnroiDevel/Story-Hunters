@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Items
   m_EditorClassIdentifier: 
   SpriteObjs:
-  - Name: "\u0411\u0430\u0440\u0430\u0431\u0430\u043D"
-    Sprite: {fileID: 6204292584936857487, guid: 8f96ee6a5947b8042b530cfb06b6d934, type: 3}
+  - Name: PC
+    Sprite: {fileID: 21300000, guid: 3a17908d4102141498e738acecb67a0a, type: 3}
   - Name: "\u0413\u0438\u0442\u0430\u0440\u0430"
     Sprite: {fileID: 21300000, guid: d28ce2fab67dd104caea9313bfda8aa5, type: 3}
   - Name: "\u0417\u0435\u0440\u043A\u0430\u043B\u043E"

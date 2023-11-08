@@ -1,6 +1,6 @@
 ﻿public enum ObjectType
 {
-    Pers,
+    Character,
     Item,
     Way
 }

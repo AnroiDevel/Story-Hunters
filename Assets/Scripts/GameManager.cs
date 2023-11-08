@@ -1,11 +1,12 @@
 ﻿using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using static UnityEngine.Networking.UnityWebRequest;
+
 
 public class GameManager : MonoBehaviour
 {
@@ -109,68 +110,66 @@ public class GameManager : MonoBehaviour
 
     internal void InitButtons(DialogObject dialogObject)
     {
-        if (dialogObject.Variants == null) return;
-
         _blockedClickPanel.SetActive(true);
-        DisableAnswerButtons();
+        DisableVariantsButtons();
         _speakerMan.gameObject.SetActive(false);
-        var variantCount = dialogObject.Variants.Length;
+        var variantCount = 2;
         if (variantCount > 0)
         {
             _variantsPanel.SetActive(true);
         }
 
-        if (dialogObject.ObjectType.Equals(ObjectType.Pers))
+        if (dialogObject.ObjectType.Equals(ObjectType.Character))
         {
             _speakerMan.sprite = _personsImageData.GetSpriteByName(dialogObject.Name);
         }
-        InitVariantsButtons(dialogObject, variantCount);
+        //InitVariantsButtons(dialogObject, variantCount);
     }
 
-    private void InitVariantsButtons(DialogObject dialogObject, int variantCount)
-    {
-        for (int i = 0; i < variantCount; i++)
-        {
-            var btn = _variantsButtons[i];
-            btn.gameObject.SetActive(true);
-            var text = btn.GetComponentInChildren<Text>();
-            var allInfo = dialogObject.Variants[i].Split("*");
-            text.text = allInfo[0];
+    //private void InitVariantsButtons(DialogObject dialogObject, int variantCount)
+    //{
+    //    for (int i = 0; i < variantCount; i++)
+    //    {
+    //        var btn = _variantsButtons[i];
+    //        btn.gameObject.SetActive(true);
+    //        var text = btn.GetComponentInChildren<Text>();
+    //        var allInfo = dialogObject.Variants[i].Split("*");
+    //        text.text = allInfo[0];
 
-            btn.onClick.RemoveAllListeners();
+    //        btn.onClick.RemoveAllListeners();
 
-            if (allInfo.Length > 1)
-            {
-                foreach (var info in allInfo.Skip(1))
-                {
-                    switch (info)
-                    {
-                        case string actionInfo when actionInfo.Contains("Close"):
-                            btn.onClick.AddListener(() => CloseDialog());
-                            break;
+    //        if (allInfo.Length > 1)
+    //        {
+    //            foreach (var info in allInfo.Skip(1))
+    //            {
+    //                switch (info)
+    //                {
+    //                    case string actionInfo when actionInfo.Contains("Close"):
+    //                        btn.onClick.AddListener(() => CloseDialog());
+    //                        break;
 
-                        case string actionInfo when actionInfo.Contains("Spitch"):
-                            btn.onClick.AddListener(async () =>
-                            {
-                                var taskCompletionSource = new TaskCompletionSource<bool>();
-                                await ShowSpitchDialogAsync(dialogObject.Dialogs);
-                            });
-                            break;
+    //                    case string actionInfo when actionInfo.Contains("Spitch"):
+    //                        btn.onClick.AddListener(async () =>
+    //                        {
+    //                            var taskCompletionSource = new TaskCompletionSource<bool>();
+    //                            await ShowSpitchDialogAsync(dialogObject.Dialogs);
+    //                        });
+    //                        break;
 
-                        case string actionInfo when actionInfo.Contains("Take"):
-                            btn.onClick.AddListener(() => TakeItem(dialogObject));
-                            break;
+    //                    case string actionInfo when actionInfo.Contains("Take"):
+    //                        btn.onClick.AddListener(() => TakeItem(dialogObject));
+    //                        break;
 
-                        // Add more cases for other actions if needed
+    //                    // Add more cases for other actions if needed
 
-                        default:
-                            // Handle unknown action
-                            break;
-                    }
-                }
-            }
-        }
-    }
+    //                    default:
+    //                        // Handle unknown action
+    //                        break;
+    //                }
+    //            }
+    //        }
+    //    }
+    //}
 
     private void CloseDialog()
     {
@@ -206,11 +205,85 @@ public class GameManager : MonoBehaviour
         _blockedClickPanel.SetActive(false);
     }
 
-    private void DisableAnswerButtons()
+    private void DisableVariantsButtons()
     {
         foreach (var answ in _variantsButtons)
         {
             answ.gameObject.SetActive(false);
+        }
+    }
+
+    internal void InitObject(DialogObject obj)
+    {
+        Processing(obj.Dialogs);
+    }
+
+    private async void Processing(string[] dialog, int startIndex = 0)
+    {
+        DisableVariantsButtons();
+        _blockedClickPanel.SetActive(true);
+        var entryString = dialog.Where(s => s.StartsWith(startIndex.ToString())).ToArray();
+        var enterIndex = 0;
+        if (!entryString[0].Contains("+"))
+        {
+            enterIndex = 1;
+            var spitch = entryString[0].Split($"{startIndex}-")[1].Split("->");
+            await _dialogManager.ShowLongInfoAsync(spitch[0], false);
+        }
+
+        if (entryString.Length > 1)
+        {
+            _variantsPanel.SetActive(true);
+            for (int i = enterIndex; i < entryString.Length; i++)
+            {
+                var variant = entryString[i].Split('+')[1]?.Split("->");
+                var next = variant.Last();
+
+                _variantsButtons[i].GetComponentInChildren<Text>().text = variant[0];
+                _variantsButtons[i].gameObject.SetActive(true);
+
+                _variantsButtons[i].onClick.RemoveAllListeners();
+                if (int.TryParse(next, out int result))
+                {
+                    _variantsButtons[i].onClick.AddListener(() =>
+                    {
+                        Processing(dialog, result);
+                    });
+
+                }
+                else
+                {
+                    _variantsButtons[i].onClick.AddListener(() =>
+                    {
+                        CloseDialog();
+                    });
+                }
+
+            }
+        }
+        else
+        {
+            var next = entryString[0].Split("->");
+            if (next.Length > 1)
+            {
+                if (int.TryParse(next[1], out int result))
+                {
+                    startIndex = result;
+                }
+                else
+                {
+                    _blockedClickPanel.SetActive(false);
+                    _variantsPanel.SetActive(false);
+                    return;
+                }
+            }
+            else
+            {
+                startIndex += 1;
+            }
+
+
+            Processing(dialog, startIndex);
         }
     }
 }

@@ -14,18 +14,21 @@ public class DialogManager : MonoBehaviour
     [SerializeField] private Text _dialogText;
     [SerializeField] private GameObject _variantsPanel;
     [SerializeField] private Button[] _variantsButtons;
+    [SerializeField] private GameObject _endSignal;
 
-    private float _delay = 0.1f;
+    private float _delay;
+    private float _defaultDelay = 0.1f;
 
 
-    public async Task ShowLongInfoAsync(string text, bool isDialog)
+
+    public async Task ShowLongInfoAsync(string text, bool isCharacter)
     {
         var strArr = text.Split('*');
         if (strArr.Length > 0)
         {
             var taskCompletionSource = new TaskCompletionSource<bool>();
 
-            StartCoroutine(ShowMessagesAsync(strArr, isDialog, () =>
+            StartCoroutine(ShowMessagesAsync(strArr, isCharacter, () =>
             {
                 taskCompletionSource.SetResult(true);
             }));
@@ -54,9 +57,10 @@ public class DialogManager : MonoBehaviour
     {
         _blockedClickPanel.SetActive(true);
         var txt = isDialog ? _dialogText : _mainText;
-        var tempDelay = _delay;
+        var tempDelay = _defaultDelay;
         foreach (string text in strArr)
         {
+            _endSignal.SetActive(false);
             _pechat.Play();
             _delay = tempDelay;
             txt.text = string.Empty;
@@ -66,12 +70,18 @@ public class DialogManager : MonoBehaviour
                 yield return new WaitForSeconds(_delay);
             }
             _pechat.Stop();
-            yield return new WaitForSeconds(1);
+            _delay = tempDelay;
+            _endSignal?.SetActive(true);
+            while (_delay > 0)
+            {
+                yield return null;
+            }
         }
 
-        _delay = tempDelay;
+        _delay = _defaultDelay;
         onComplete?.Invoke();
     }
+
 
     public void EndDialog()
     {

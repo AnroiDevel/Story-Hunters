@@ -37,11 +37,11 @@ public class ClickableObject : MonoBehaviour, IPointerEnterHandler, IPointerExit
         GetSprite();
 
         SetPositionsAndScale(obj);
+        gameObject.SetActive(true);
 
         if (_isActive)
             ButtonInit();
 
-        gameObject.SetActive(true);
     }
 
     private void SetPositionsAndScale(DialogObject obj)
@@ -59,7 +59,7 @@ public class ClickableObject : MonoBehaviour, IPointerEnterHandler, IPointerExit
         _button.onClick.RemoveAllListeners();
         _button.onClick.AddListener(() =>
         {
-            _gameManager.InitButtons(_object);
+            _gameManager.InitObject(_object);
         });
     }
 
@@ -69,7 +69,7 @@ public class ClickableObject : MonoBehaviour, IPointerEnterHandler, IPointerExit
         {
             _image.sprite = _imageDataItems.GetSpriteByName(_name);
         }
-        else if (_clickObjectType == ObjectType.Pers)
+        else if (_clickObjectType == ObjectType.Character)
         {
             _image.sprite = _imageDataPersons.GetSpriteByName(_name);
         }
@@ -85,7 +85,7 @@ public class ClickableObject : MonoBehaviour, IPointerEnterHandler, IPointerExit
         _originalHotspot = currentPosition;
 
         Texture2D cursorTexture = (_clickObjectType == ObjectType.Item) ? _handCursorTexture :
-            (_clickObjectType == ObjectType.Pers) ? _spitchCursorTexture : _moveCursorTexture;
+            (_clickObjectType == ObjectType.Character) ? _spitchCursorTexture : _moveCursorTexture;
 
         _gameManager.ShowSmallInfo(_object.Info);
         Cursor.SetCursor(cursorTexture, currentPosition, CursorMode.Auto);
