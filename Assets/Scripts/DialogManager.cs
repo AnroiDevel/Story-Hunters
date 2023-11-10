@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
@@ -56,7 +57,22 @@ public class DialogManager : MonoBehaviour
     private IEnumerator ShowMessagesAsync(string[] strArr, bool isDialog, Action onComplete)
     {
         _blockedClickPanel.SetActive(true);
-        var txt = isDialog ? _dialogText : _mainText;
+        Text txt;
+        if (isDialog)
+        {
+            txt = _dialogText;
+            _speakerMan.gameObject.SetActive(true);
+            _dialogText.gameObject.SetActive(true);
+            _mainText.gameObject.SetActive(false);
+        }
+        else
+        {
+            _speakerMan.gameObject.SetActive(false);
+            _dialogText.gameObject.SetActive(false);
+            _mainText.gameObject.SetActive(true);
+            txt = _mainText;
+        }
+
         var tempDelay = _defaultDelay;
         foreach (string text in strArr)
         {
@@ -70,7 +86,8 @@ public class DialogManager : MonoBehaviour
                 yield return new WaitForSeconds(_delay);
             }
             _pechat.Stop();
-            _delay = tempDelay;
+            //if (text != strArr.Last())
+                _delay = tempDelay;
             _endSignal?.SetActive(true);
             while (_delay > 0)
             {

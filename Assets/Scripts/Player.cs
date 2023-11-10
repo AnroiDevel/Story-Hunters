@@ -28,10 +28,10 @@ public class Player:MonoBehaviour
         _itemImages[index].gameObject.SetActive(true);
     }
 
-    internal void RemoveItem(DialogObject item)
+    internal void RemoveItem(string itemName)
     {
-        int index = Inventory.Keys.ToList().IndexOf(item.Name);
+        int index = Inventory.Keys.ToList().IndexOf(itemName);
         _itemImages[index].gameObject.SetActive(false);
-        Inventory.Remove(item.Name);
+        Inventory.Remove(itemName);
     }
 }

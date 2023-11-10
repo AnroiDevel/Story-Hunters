@@ -17,7 +17,7 @@ MonoBehaviour:
     Sprite: {fileID: 6695706899960652775, guid: 9c4887566103d2f49b34c7140088d259, type: 3}
   - Name: "\u0410\u043B\u0435\u043D\u0430"
     Sprite: {fileID: -803370440, guid: 93128bdb60042e54a817c362cdd60e18, type: 3}
-  - Name: "\u0421\u0435\u0440\u0433\u0435\u0439"
+  - Name: "\u0421\u0435\u0440\u0435\u0433\u0430"
     Sprite: {fileID: -3849138372490880085, guid: e4891d94deb1dde448439c5abab5ee3d, type: 3}
   - Name: "\u0422\u0430\u043C\u0438"
     Sprite: {fileID: 1532703833, guid: 60df000134abf1f4db81c5a86ec19960, type: 3}
