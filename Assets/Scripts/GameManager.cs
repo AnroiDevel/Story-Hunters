@@ -57,7 +57,7 @@ public class GameManager : MonoBehaviour
 
     public void StartGame()
     {
-        ApplyLocate(_locationsDict[2]);
+        ApplyLocate(_locationsDict[1]);
     }
 
     private async void ApplyLocate(Location currentLocation)
