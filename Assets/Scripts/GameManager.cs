@@ -69,7 +69,8 @@ public class GameManager : MonoBehaviour
         ClearAllLocationFields();
         ShowObjects(currentLocation);
 
-        await _dialogManager.ShowLongInfoAsync(currentLocation.Info);
+        await Processing(currentLocation.Info);
+        //await _dialogManager.ShowLongInfoAsync(currentLocation.Info);
         _blockedClickPanel.SetActive(false);
 
         //_player.AddItem(new DialogObject() {Name = "Фонарик" });
@@ -185,6 +186,127 @@ public class GameManager : MonoBehaviour
         Processing(obj);
     }
 
+
+    private async Task Processing(string[] dialog, int startIndex = 0)
+    {
+        if (dialog.Length == 0) return;
+        DisableVariantsButtons();
+        _blockedClickPanel.SetActive(true);
+        var entryString = dialog.Where(s => s.StartsWith(startIndex.ToString())).ToArray();
+        var enterIndex = 0;
+        if (!entryString[0].Contains("+"))
+        {
+            var spitch = entryString[0].Split($"{startIndex}-")[1].Split("->");
+
+            await _dialogManager.ShowLongInfoAsync(spitch[0]);
+
+            if (int.TryParse(spitch[1], out int res))
+            {
+                await Processing(dialog, res);
+            }
+
+        }
+
+        else if (entryString.Length > enterIndex)
+        {
+            _variantsPanel.SetActive(true);
+            var buttonsCnt = 0;
+            for (int i = enterIndex; i < entryString.Length; i++)
+            {
+                var variant = entryString[i].Split('+')[1]?.Split("->");
+                var next = variant.Last();
+                var button = _variantsButtons[buttonsCnt++];
+                button.onClick.RemoveAllListeners();
+
+                if (next.Contains("IF"))
+                {
+                    var item = next.Split(' ')[1];
+                    if (!_player.Inventory.ContainsKey(item))
+                    {
+                        _blockedClickPanel.SetActive(false);
+                        continue;
+                    }
+                    next = next.Split(' ')[2];
+                    button.onClick.AddListener(() => _player.RemoveItem(item));
+                }
+
+                button.GetComponentInChildren<Text>().text = variant[0];
+                button.gameObject.SetActive(true);
+
+                if (int.TryParse(next, out int result))
+                {
+                    button.onClick.AddListener(async () =>
+                    {
+                       await Processing(dialog, result);
+                    });
+                }
+                else
+                {
+                    if (next.Contains("WAY") && !next.Contains("ADD"))
+                    {
+                        var nextScena = next.Split("WAY")[1];
+                        button.onClick.AddListener(() =>
+                        {
+                            ApplyLocate(_locationsDict[int.Parse(nextScena)]);
+
+                        });
+                    }
+                    else if (next.Contains("WAY") && next.Contains("ADD"))
+                    {
+                        var nextValues = next.Split("WAY")[1].Split("ADD");
+                        var nextScena = _locationsDict[int.Parse(nextValues[0])];
+
+                        button.onClick.AddListener(() =>
+                        {
+                            _player.AddItem(new DialogObject() {Name= nextValues[1] });
+                            ApplyLocate(nextScena);
+
+                        });
+                    }
+                    //else if (next.Contains("ADD"))
+                    //{
+                    //    button.onClick.AddListener(() =>
+                    //    {
+                    //        TakeItem(obj);
+
+                    //    });
+                    //}
+                    else
+                    {
+                        button.onClick.AddListener(() =>
+                        {
+                            CloseDialog();
+                        });
+                    }
+                }
+
+            }
+        }
+        else
+        {
+            var next = entryString[0].Split("->");
+            if (next.Length > 1)
+            {
+                if (int.TryParse(next[1], out int result))
+                {
+                    startIndex = result;
+                }
+                else
+                {
+                    _blockedClickPanel.SetActive(false);
+                    _variantsPanel.SetActive(false);
+                    return;
+                }
+            }
+            else
+            {
+                startIndex += 1;
+            }
+
+            await Processing(dialog, startIndex);
+        }
+    }
+
     private async void Processing(DialogObject obj, int startIndex = 0)
     {
         DisableVariantsButtons();
@@ -218,7 +340,7 @@ public class GameManager : MonoBehaviour
 
                 if (next.Contains("IF"))
                 {
-                    var item = next.Split(' ')[1];
+                    var item = next.Split(" ")[1];
                     if (!_player.Inventory.ContainsKey(item))
                     {
                         _blockedClickPanel.SetActive(false);
@@ -240,12 +362,24 @@ public class GameManager : MonoBehaviour
                 }
                 else
                 {
-                    if (next.Contains("WAY"))
+                    if (next.Contains("WAY") && !next.Contains("ADD"))
                     {
                         var nextScena = next.Split("WAY")[1];
                         button.onClick.AddListener(() =>
                         {
                             ApplyLocate(_locationsDict[int.Parse(nextScena)]);
+
+                        });
+                    }
+                    else if (next.Contains("WAY") && next.Contains("ADD"))
+                    {
+                        var nextValues = next.Split("WAY")[1].Split("ADD");
+                        var nextScena = _locationsDict[int.Parse(nextValues[0])];
+
+                        button.onClick.AddListener(() =>
+                        {
+                            _player.AddItem(new DialogObject() {Name= nextValues[1].Trim() });
+                            ApplyLocate(nextScena);
 
                         });
                     }

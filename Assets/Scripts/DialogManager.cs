@@ -58,6 +58,7 @@ public class DialogManager : MonoBehaviour
 
     private void ActivateSpeaker(string name)
     {
+        _mainText.text = string.Empty;
         if (string.IsNullOrEmpty(name))
         {
             DeactivateSpeaker();

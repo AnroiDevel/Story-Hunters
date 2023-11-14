@@ -61,7 +61,7 @@ public class QuestRedactor : MonoBehaviour
             {
                 Id = id,
                 Name = _nameLocation.text,
-                Info = _descriptionLocation.text,
+                Info = _descriptionLocation.text.Split("*"),
                 Objects = persons,
             };
 
@@ -71,7 +71,7 @@ public class QuestRedactor : MonoBehaviour
         {
             location.Id = id;
             location.Name = _nameLocation.text;
-            location.Info = _descriptionLocation.text;
+            location.Info = _descriptionLocation.text.Split("*");
             location.Objects = persons;
         }
 
@@ -116,7 +116,7 @@ public class QuestRedactor : MonoBehaviour
 
 
         _nameLocation.text = loc.Name;
-        _descriptionLocation.text = loc.Info;
+        _descriptionLocation.text = loc.Info.ToString();
 
     }
 
