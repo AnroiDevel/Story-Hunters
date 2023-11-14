@@ -40,7 +40,7 @@ public class GameManager : MonoBehaviour
     {
         instance = this;
         Load();
-        StartGame();
+        //StartGame();
     }
 
     private void Load()
@@ -69,8 +69,12 @@ public class GameManager : MonoBehaviour
         ClearAllLocationFields();
         ShowObjects(currentLocation);
 
-        await _dialogManager.ShowLongInfoAsync(currentLocation.Info, false);
+        await _dialogManager.ShowLongInfoAsync(currentLocation.Info);
         _blockedClickPanel.SetActive(false);
+
+        //_player.AddItem(new DialogObject() {Name = "Фонарик" });
+        //_player.AddItem(new DialogObject() { Name = "Веревка" });
+        //_player.AddItem(new DialogObject() { Name = "Нож" });
     }
 
     private void ShowObjects(Location currentLocation)
@@ -131,53 +135,8 @@ public class GameManager : MonoBehaviour
         {
             _speakerMan.sprite = _personsImageData.GetSpriteByName(dialogObject.Name);
         }
-        //InitVariantsButtons(dialogObject, variantCount);
     }
 
-    //private void InitVariantsButtons(DialogObject dialogObject, int variantCount)
-    //{
-    //    for (int i = 0; i < variantCount; i++)
-    //    {
-    //        var btn = _variantsButtons[i];
-    //        btn.gameObject.SetActive(true);
-    //        var text = btn.GetComponentInChildren<Text>();
-    //        var allInfo = dialogObject.Variants[i].Split("*");
-    //        text.text = allInfo[0];
-
-    //        btn.onClick.RemoveAllListeners();
-
-    //        if (allInfo.Length > 1)
-    //        {
-    //            foreach (var info in allInfo.Skip(1))
-    //            {
-    //                switch (info)
-    //                {
-    //                    case string actionInfo when actionInfo.Contains("Close"):
-    //                        btn.onClick.AddListener(() => CloseDialog());
-    //                        break;
-
-    //                    case string actionInfo when actionInfo.Contains("Spitch"):
-    //                        btn.onClick.AddListener(async () =>
-    //                        {
-    //                            var taskCompletionSource = new TaskCompletionSource<bool>();
-    //                            await ShowSpitchDialogAsync(dialogObject.Dialogs);
-    //                        });
-    //                        break;
-
-    //                    case string actionInfo when actionInfo.Contains("Take"):
-    //                        btn.onClick.AddListener(() => TakeItem(dialogObject));
-    //                        break;
-
-    //                    // Add more cases for other actions if needed
-
-    //                    default:
-    //                        // Handle unknown action
-    //                        break;
-    //                }
-    //            }
-    //        }
-    //    }
-    //}
 
     private void CloseDialog()
     {
@@ -195,7 +154,7 @@ public class GameManager : MonoBehaviour
 
         foreach (var dialogPart in dialog)
         {
-            await _dialogManager.ShowLongInfoAsync(dialogPart, true);
+            await _dialogManager.ShowLongInfoAsync(dialogPart);
         }
         _dialogManager.EndDialog();
     }
@@ -235,13 +194,18 @@ public class GameManager : MonoBehaviour
         var enterIndex = 0;
         if (!entryString[0].Contains("+"))
         {
-            enterIndex = 1;
             var spitch = entryString[0].Split($"{startIndex}-")[1].Split("->");
 
-            await _dialogManager.ShowLongInfoAsync(spitch[0], CheckSpeaker(obj));
+            await _dialogManager.ShowLongInfoAsync(spitch[0]);
+
+            if (int.TryParse(spitch[1], out int res))
+            {
+                Processing(obj, res);
+            }
+
         }
 
-        if (entryString.Length > 1)
+        else if (entryString.Length > enterIndex)
         {
             _variantsPanel.SetActive(true);
             var buttonsCnt = 0;
@@ -256,7 +220,10 @@ public class GameManager : MonoBehaviour
                 {
                     var item = next.Split(' ')[1];
                     if (!_player.Inventory.ContainsKey(item))
+                    {
+                        _blockedClickPanel.SetActive(false);
                         continue;
+                    }
                     next = next.Split(' ')[2];
                     button.onClick.AddListener(() => _player.RemoveItem(item));
                 }
@@ -326,12 +293,4 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private bool CheckSpeaker(DialogObject obj)
-    {
-        if (obj.ObjectType != ObjectType.Character) return false;
-
-        _speakerMan.sprite = _personsImageData.GetSpriteByName(obj.Name);
-
-        return true;
-    }
 }

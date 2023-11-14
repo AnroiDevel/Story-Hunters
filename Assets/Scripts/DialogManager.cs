@@ -16,20 +16,22 @@ public class DialogManager : MonoBehaviour
     [SerializeField] private GameObject _variantsPanel;
     [SerializeField] private Button[] _variantsButtons;
     [SerializeField] private GameObject _endSignal;
+    [SerializeField] private ImageDataSO _spekersImges;
 
     private float _delay;
     private float _defaultDelay = 0.1f;
 
 
 
-    public async Task ShowLongInfoAsync(string text, bool isCharacter)
+    public async Task ShowLongInfoAsync(string text)
     {
+        DeactivateSpeaker();
         var strArr = text.Split('*');
         if (strArr.Length > 0)
         {
             var taskCompletionSource = new TaskCompletionSource<bool>();
 
-            StartCoroutine(ShowMessagesAsync(strArr, isCharacter, () =>
+            StartCoroutine(ShowMessagesAsync(strArr, () =>
             {
                 taskCompletionSource.SetResult(true);
             }));
@@ -54,35 +56,66 @@ public class DialogManager : MonoBehaviour
     }
 
 
-    private IEnumerator ShowMessagesAsync(string[] strArr, bool isDialog, Action onComplete)
+    private void ActivateSpeaker(string name)
     {
-        _blockedClickPanel.SetActive(true);
-        Text txt;
-        if (isDialog)
+        if (string.IsNullOrEmpty(name))
         {
-            txt = _dialogText;
-            _speakerMan.gameObject.SetActive(true);
-            _dialogText.gameObject.SetActive(true);
-            _mainText.gameObject.SetActive(false);
+            DeactivateSpeaker();
         }
         else
         {
-            _speakerMan.gameObject.SetActive(false);
-            _dialogText.gameObject.SetActive(false);
-            _mainText.gameObject.SetActive(true);
-            txt = _mainText;
+            ActivateSpeakerWithImage(name);
         }
+    }
+
+    private void DeactivateSpeaker()
+    {
+        _speakerMan.gameObject.SetActive(false);
+        _dialogText.gameObject.SetActive(false);
+        _mainText.gameObject.SetActive(true);
+    }
+
+    private void ActivateSpeakerWithImage(string name)
+    {
+        name = name.Trim();
+        _speakerMan.sprite = _spekersImges.GetSpriteByName(name);
+        _speakerMan.gameObject.SetActive(true);
+        _dialogText.gameObject.SetActive(true);
+        _mainText.gameObject.SetActive(false);
+    }
+
+
+    private IEnumerator ShowMessagesAsync(string[] strArr, Action onComplete)
+    {
+        _blockedClickPanel.SetActive(true);
+        Text txtObj;
 
         var tempDelay = _defaultDelay;
         foreach (string text in strArr)
         {
+            var str = text.Split("D:");
+            var speaker = string.Empty;
+            var info = string.Empty;
+            if (str.Length > 1)
+            {
+                speaker = str[0];
+                txtObj = _dialogText;
+                info = str[1];
+            }
+            else
+            {
+                info = str[0];
+                txtObj = _mainText;
+            }
+            ActivateSpeaker(speaker);
+
             _endSignal.SetActive(false);
             _pechat.Play();
             _delay = tempDelay;
-            txt.text = string.Empty;
-            foreach (char c in text)
+            txtObj.text = string.Empty;
+            foreach (char c in info)
             {
-                txt.text += c;
+                txtObj.text += c;
                 yield return new WaitForSeconds(_delay);
             }
             _pechat.Stop();
@@ -105,6 +138,7 @@ public class DialogManager : MonoBehaviour
         _blockedClickPanel.SetActive(false);
         _speakerMan.gameObject.SetActive(false);
         _dialogText.gameObject.SetActive(false);
+        _mainText.gameObject.SetActive(true);
     }
 }
 

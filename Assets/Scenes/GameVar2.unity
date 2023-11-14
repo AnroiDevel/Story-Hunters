@@ -1228,7 +1228,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd1079585184bf04eb8a5f69497508d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _questData: {fileID: 4900000, guid: c5e551b90f2e19d4f8dd8bf058895743, type: 3}
+  _questData: {fileID: 4900000, guid: 2ed796467456dcf40b15fabaf9b25289, type: 3}
   _variantsButtons:
   - {fileID: 1395951286}
   - {fileID: 1267286506}
@@ -1291,9 +1291,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _itemImages:
   - {fileID: 31779818}
+  - {fileID: 1999440279}
   - {fileID: 1490531998}
+  - {fileID: 1518642774}
   - {fileID: 1181776515}
+  - {fileID: 1911828938}
   - {fileID: 1326412922}
+  - {fileID: 1515480600}
   _dataItemSprites: {fileID: 11400000, guid: aa32a806ebbf1a741ad94ad6914bd494, type: 2}
 --- !u!114 &295980866
 MonoBehaviour:
@@ -1315,6 +1319,7 @@ MonoBehaviour:
   _variantsPanel: {fileID: 9727542}
   _variantsButtons: []
   _endSignal: {fileID: 568968792}
+  _spekersImges: {fileID: 11400000, guid: 4d1412a3a7029eb46840029c4f29d421, type: 2}
 --- !u!114 &295980867
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4294,7 +4299,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1068437518
 RectTransform:
   m_ObjectHideFlags: 0

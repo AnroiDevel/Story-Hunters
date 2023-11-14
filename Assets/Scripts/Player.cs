@@ -26,6 +26,14 @@ public class Player:MonoBehaviour
         var index = Inventory.Count-1;
         _itemImages[index].sprite = _dataItemSprites.GetSpriteByName(item.Name);
         _itemImages[index].gameObject.SetActive(true);
+
+        if(Inventory.ContainsKey("Надпись у стены") && Inventory.ContainsKey("Надпись на полу") && Inventory.ContainsKey("Надпись за каналом"))
+        {
+            Inventory.Add("ALL", new DialogObject());
+            RemoveItem("Надпись у стены");
+            RemoveItem("Надпись на полу");
+            RemoveItem("Надпись за каналом");
+        }
     }
 
     internal void RemoveItem(string itemName)
