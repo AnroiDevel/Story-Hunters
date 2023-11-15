@@ -82,6 +82,7 @@ public class ClickableObject : MonoBehaviour, IPointerEnterHandler, IPointerExit
 
     public void OnPointerEnter(PointerEventData eventData)
     {
+        if(!_isActive) return;
         Vector2 currentPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         _originalHotspot = currentPosition;
 

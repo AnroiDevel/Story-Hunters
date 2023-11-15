@@ -204,6 +204,11 @@ public class GameManager : MonoBehaviour
             {
                 await Processing(dialog, res);
             }
+            else if (spitch[1].Contains("ADD"))
+            {
+                var item = spitch[1].Split("ADD")[1];
+                _player.AddItem(new DialogObject() { Name = item.Trim() });
+            }
 
         }
 
@@ -237,7 +242,7 @@ public class GameManager : MonoBehaviour
                 {
                     button.onClick.AddListener(async () =>
                     {
-                       await Processing(dialog, result);
+                        await Processing(dialog, result);
                     });
                 }
                 else
@@ -258,7 +263,7 @@ public class GameManager : MonoBehaviour
 
                         button.onClick.AddListener(() =>
                         {
-                            _player.AddItem(new DialogObject() {Name= nextValues[1] });
+                            _player.AddItem(new DialogObject() { Name = nextValues[1].Trim() });
                             ApplyLocate(nextScena);
 
                         });
@@ -309,6 +314,7 @@ public class GameManager : MonoBehaviour
 
     private async void Processing(DialogObject obj, int startIndex = 0)
     {
+        if (obj.Dialogs.Length == 0) return;
         DisableVariantsButtons();
         _blockedClickPanel.SetActive(true);
         var dialog = obj.Dialogs;
@@ -324,7 +330,11 @@ public class GameManager : MonoBehaviour
             {
                 Processing(obj, res);
             }
-
+            else if (spitch[1].Contains("ADD"))
+            {
+                var item = spitch[1].Split("ADD")[1];
+                _player.AddItem(new DialogObject() { Name = item.Trim() });
+            }
         }
 
         else if (entryString.Length > enterIndex)
@@ -340,13 +350,13 @@ public class GameManager : MonoBehaviour
 
                 if (next.Contains("IF"))
                 {
-                    var item = next.Split(" ")[1];
+                    var item = next.Split("IF")[1].Split(" ")[1];
                     if (!_player.Inventory.ContainsKey(item))
                     {
                         _blockedClickPanel.SetActive(false);
                         continue;
                     }
-                    next = next.Split(' ')[2];
+                    next = next.Split(item)[1];
                     button.onClick.AddListener(() => _player.RemoveItem(item));
                 }
 
@@ -364,7 +374,7 @@ public class GameManager : MonoBehaviour
                 {
                     if (next.Contains("WAY") && !next.Contains("ADD"))
                     {
-                        var nextScena = next.Split("WAY")[1];
+                        var nextScena = next.Split("WAY")[1].Split(" ")[1];
                         button.onClick.AddListener(() =>
                         {
                             ApplyLocate(_locationsDict[int.Parse(nextScena)]);
@@ -378,7 +388,7 @@ public class GameManager : MonoBehaviour
 
                         button.onClick.AddListener(() =>
                         {
-                            _player.AddItem(new DialogObject() {Name= nextValues[1].Trim() });
+                            _player.AddItem(new DialogObject() { Name = nextValues[1].Trim() });
                             ApplyLocate(nextScena);
 
                         });

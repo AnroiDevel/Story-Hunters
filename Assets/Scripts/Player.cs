@@ -17,6 +17,8 @@ public class Player : MonoBehaviour
     {
         foreach (var item in _itemImages)
             item.gameObject.SetActive(false);
+
+        AddItem(new DialogObject() { Name = "BAD" });
     }
 
 
@@ -34,6 +36,10 @@ public class Player : MonoBehaviour
             RemoveItem("Надпись у стены");
             RemoveItem("Надпись на полу");
             RemoveItem("Надпись за каналом");
+        }
+        if(Inventory.ContainsKey("BAD") && Inventory.ContainsKey("GOOD"))
+        {
+            Inventory.Remove("BAD");
         }
     }
 
