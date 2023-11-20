@@ -15,6 +15,7 @@ public class ClickableObject : MonoBehaviour, IPointerEnterHandler, IPointerExit
     [SerializeField] private ImageDataSO _imageDataPersons;
     [SerializeField] private ImageDataSO _imageDataItems;
     [SerializeField] private ImageDataSO _imageDataWays;
+    [SerializeField] private ParticleSystem _particleSystem;
 
     private string _name;
     private bool _isActive;
@@ -41,8 +42,14 @@ public class ClickableObject : MonoBehaviour, IPointerEnterHandler, IPointerExit
         gameObject.SetActive(true);
 
         if (_isActive)
+        {
             ButtonInit();
-
+            _particleSystem.Play();
+        }
+        else
+        {
+            _particleSystem.Stop();
+        }
     }
 
     private void SetPositionsAndScale(DialogObject obj)
