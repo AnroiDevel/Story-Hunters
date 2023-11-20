@@ -21,3 +21,5 @@ MonoBehaviour:
     Sprite: {fileID: -9051692800306759852, guid: aa9a3d259a322af49974060baa8d8f70, type: 3}
   - Name: "\u041B\u044E\u043A"
     Sprite: {fileID: 21300000, guid: fcb4342a577e58341b261aec007b93d4, type: 3}
+  - Name: "\u0414\u0432\u0435\u0440\u044C \u0438\u0437 \u043A\u043E\u043C\u043D\u0430\u0442\u044B"
+    Sprite: {fileID: 21300000, guid: 3a17908d4102141498e738acecb67a0a, type: 3}
